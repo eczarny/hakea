@@ -1,0 +1,97 @@
+##
+# Dropwizard Configuration - hakea-indexing-service
+##
+
+# Hakea settings.
+hakea:
+
+  # The list projects, and their Git URIs, to be indexed by Hakea.
+  projects:
+    -
+      name: spectacle
+      uri: git://github.com/eczarny/spectacle.git
+    -
+      name: zerokit
+      uri: git://github.com/eczarny/zerokit.git
+    -
+      name: xmlrpc
+      uri: git://github.com/eczarny/xmlrpc.git
+
+  # The Solr client configuration.
+  solr:
+
+    # The Solr URL used by the client.
+    url: http://localhost:8983/solr
+
+# HTTP-specific options.
+http:
+
+  # The port on which the HTTP server listens for service requests.
+  port: 8000
+  
+  # The port on which the HTTP server listens for administrative requests.
+  adminPort: 8001
+
+  # HTTP request log settings
+  requestLog:
+
+    # Settings for logging to stdout.
+    console:
+
+      # If true, write log statements to stdout.
+      enabled: false
+
+    # Settings for logging to a file.
+    file:
+
+      # If true, write log statements to a file.
+      enabled: false
+
+      # The file to which statements will be logged.
+      currentLogFilename: ./logs/requests.log
+
+      #  When the log file rolls over, the file will be archived to example-2012-03-15.log.gz,
+      # example.log will be truncated, and new statements written to it.
+      archivedLogFilenamePattern: ./logs/requests-%d.log.gz
+
+      # The maximum number of log files to archive.
+      archivedFileCount: 5
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+    org.apache.solr.client: WARN
+    org.eclipse.jetty.server: WARN
+
+  # Settings for logging to stdout.
+  console:
+
+    # If true, write log statements to stdout.
+    enabled: true
+
+    # Do not display log statements below this threshold to stdout.
+    threshold: ALL
+
+  # Settings for logging to a file.
+  file:
+
+    # If true, write log statements to a file.
+    enabled: false
+
+    # Do not write log statements below this threshold to the file.
+    threshold: ALL
+
+    # The file to which statements will be logged.
+    currentLogFilename: ./logs/hakea-indexing-service.log
+
+    #  When the log file rolls over, the file will be archived to example-2012-03-15.log.gz,
+    # example.log will be truncated, and new statements written to it.
+    archivedLogFilenamePattern: ./logs/hakea-indexing-service-%d{HH-mm}.log.gz
+
+    # The maximum number of log files to archive.
+    archivedFileCount: 5
