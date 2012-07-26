@@ -4,7 +4,7 @@ import akka.actor.{ ActorSystem, Props }
 import akka.util.duration._
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
-import com.divisiblebyzero.hakea.indexing.processor.{ ProjectProcessor, StartIndexing, StopIndexing }
+import com.divisiblebyzero.hakea.indexing.processor.{ ProjectProcessor, StartIndexing }
 import com.yammer.dropwizard.Logging
 
 class ManagedAkkaIndexer(configuration: HakeaConfiguration) extends ManagedIndexer(configuration) with Logging {
@@ -17,12 +17,14 @@ class ManagedAkkaIndexer(configuration: HakeaConfiguration) extends ManagedIndex
 
     log.info("Starting up Hakea with projects: %s".format(projects.map(_.name)))
 
-    system.scheduler.schedule(5 seconds, 5 minutes) {
+    system.scheduler.schedule(5 seconds, 10 minutes) {
       projectProcessor ! StartIndexing(projects)
     }
   }
 
   override def stop() {
-    projectProcessor ! StopIndexing
+    log.info("Shutting down all Hakea processors...")
+
+    system.shutdown()
   }
 }

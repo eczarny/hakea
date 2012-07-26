@@ -1,6 +1,7 @@
 package com.divisiblebyzero.hakea.config
 
-import org.apache.solr.client.solrj.impl.HttpSolrServer
+import org.apache.solr.client.solrj.SolrServer
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 import org.hibernate.validator.constraints.NotEmpty
 import org.codehaus.jackson.annotate.JsonProperty
 
@@ -11,7 +12,10 @@ class HakeaSolrConfiguration {
   var url: String = "http://localhost:8983/solr"
 
   @JsonProperty
-  var batchSize: Int = 100
+  var queueSize: Int = 10
 
-  def toSolrServer = new HttpSolrServer(url)
+  @JsonProperty
+  var threadCount: Int = 2
+
+  def toSolrServer: SolrServer = new ConcurrentUpdateSolrServer(url, queueSize, threadCount)
 }

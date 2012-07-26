@@ -9,7 +9,11 @@ import org.eclipse.jgit.lib.{ Ref, Repository }
 
 sealed trait IndexProcessorRequest
 
-case class IndexRepository(project: Project, repository: Repository, refs: List[Ref]) extends IndexProcessorRequest
+case class IndexRepositoryFor(project: Project, repository: Repository, refs: List[Ref]) extends IndexProcessorRequest
+
+case class FinishedIndexingCommitsFor(project: Project, repository: Repository, refs: List[Ref]) extends IndexProcessorRequest
+
+case class FinishedIndexingFilesFor(project: Project, repository: Repository, refs: List[Ref]) extends IndexProcessorRequest
 
 class IndexProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
   protected val commitIndexProcessor =
@@ -19,12 +23,16 @@ class IndexProcessor(configuration: HakeaConfiguration) extends Actor with Loggi
     context.actorOf(Props(new FileIndexProcessor(configuration)), "fileIndexProcessor")
 
   def receive = {
-    case IndexRepository(project, repository, refs) => {
-      refs.foreach { ref =>
-        commitIndexProcessor ! IndexCommitsAtRef(project, repository, ref)
-      }
+    case IndexRepositoryFor(project, repository, refs) => {
+      commitIndexProcessor ! IndexCommitsFor(project, repository, refs)
+    }
+    case FinishedIndexingCommitsFor(project, repository, refs) => {
+      log.info("Finished indexing the commit history of %s.".format(project.name))
 
-      fileIndexProcessor ! IndexFilesForRefs(project, repository, refs)
+      fileIndexProcessor ! IndexFilesFor(project, repository, refs)
+    }
+    case FinishedIndexingFilesFor(project, repository, refs) => {
+      log.info("Finished indexing files for %s.".format(project.name))
     }
   }
 }

@@ -45,7 +45,7 @@ class RepositoryProcessor(configuration: HakeaConfiguration) extends Actor with 
           }
         } onSuccess {
           case updatedRefs: List[_] if !updatedRefs.isEmpty => {
-            indexProcessor ! IndexRepository(project, repository, updatedRefs.toList)
+            indexProcessor ! IndexRepositoryFor(project, repository, updatedRefs.toList)
           }
           case _ => {
             log.info("The %s repository has not changed.".format(project.name))
@@ -71,7 +71,7 @@ class RepositoryProcessor(configuration: HakeaConfiguration) extends Actor with 
           val repository = git.getRepository
           val refs = repository.getRefDatabase.getRefs(R_HEADS).values.toSeq
 
-          indexProcessor ! IndexRepository(project, repository, refs.toList)
+          indexProcessor ! IndexRepositoryFor(project, repository, refs.toList)
         }
       } onFailure {
         case e: Exception => e.printStackTrace()

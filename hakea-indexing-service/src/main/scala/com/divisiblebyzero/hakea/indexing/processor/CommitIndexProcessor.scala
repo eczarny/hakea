@@ -6,7 +6,7 @@ import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.divisiblebyzero.hakea.indexing.solr.{ EnqueueInputDocument, InputDocumentQueue }
+import com.divisiblebyzero.hakea.indexing.solr.{ DispatchInputDocument, InputDocumentDispatcher }
 import com.yammer.dropwizard.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.diff._
@@ -17,32 +17,54 @@ import scala.collection.JavaConversions._
 
 sealed trait CommitIndexProcessorRequest
 
-case class IndexCommitsAtRef(project: Project, repository: Repository, ref: Ref) extends CommitIndexProcessorRequest
+case class IndexCommitsFor(project: Project, repository: Repository, refs: List[Ref]) extends CommitIndexProcessorRequest
+
+case class IndexCommit(project: Project, repository: Repository, commit: RevCommit, walk: RevWalk) extends CommitIndexProcessorRequest
+
+case class CommitIndexingComplete(project: Project, repository: Repository, refs: List[Ref]) extends CommitIndexProcessorRequest
 
 class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
-  protected val inputDocumentQueue =
-    context.actorOf(Props(new InputDocumentQueue(configuration)), "inputDocumentQueue")
+  protected val commitIndexer = context.actorOf(Props(new CommitIndexer(configuration)), "commitIndexer")
 
   def receive = {
-    case IndexCommitsAtRef(project, repository, ref) => {
+    case IndexCommitsFor(project, repository, refs) => {
       val walk = new RevWalk(repository)
 
-      log.info("Indexing the commit history of %s at: %s".format(project.name, ref.getName))
+      walk.markStart(refs.map(ref => walk.parseCommit(ref.getObjectId)))
 
-      walk.markStart(walk.parseCommit(ref.getObjectId))
+      log.info("Indexing commit history of %s.".format(project.name))
 
       walk.foreach { commit =>
-        inputDocumentQueue ! EnqueueInputDocument(commitToInputDocument(project, repository, ref, commit, walk))
+        commitIndexer ! IndexCommit(project, repository, commit, walk)
       }
+
+      commitIndexer ! CommitIndexingComplete(project, repository, refs)
+    }
+  }
+}
+
+class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Logging {
+  protected val inputDocumentDispatcher =
+    context.actorOf(Props(new InputDocumentDispatcher(configuration)), "inputDocumentDispatcher")
+
+  protected val indexProcessor = context.actorFor("/user/projectProcessor/repositoryProcessor/indexProcessor")
+
+  def receive = {
+    case IndexCommit(project, repository, commit, walk) => {
+      inputDocumentDispatcher ! DispatchInputDocument(commitToInputDocument(project, repository, commit, walk))
+    }
+    case CommitIndexingComplete(project, repository, refs) => {
+      indexProcessor ! FinishedIndexingCommitsFor(project, repository, refs)
     }
   }
 
-  protected def commitToInputDocument(project: Project, repository: Repository, ref: Ref, commit: RevCommit, walk: RevWalk) = {
+  protected def commitToInputDocument(project: Project, repository: Repository, commit: RevCommit, walk: RevWalk) = {
     val inputDocument = new SolrInputDocument
 
     inputDocument.addField("id", "commit::%s".format(commit.getId.name))
 
-    inputDocument.addField("ref_s", ref.getName)
+    // TODO: Find a way of indexing the refs a commit belongs to.
+//    inputDocument.addField("ref_s", ref.getName)
     inputDocument.addField("project_s", project.name)
 
     inputDocument.addField("commit_author_name_t", commit.getAuthorIdent.getName)
@@ -55,7 +77,7 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
     inputDocument.addField("commit_short_message_en", commit.getShortMessage)
 
     commit.getFooterLines.filterNot(_.getValue.isEmpty).foreach { footerLine =>
-      inputDocument.addField("commit_footer_line_%s_t".format(footerLine.getKey.toLowerCase), footerLine.getValue)
+      inputDocument.addField("commit_footer_line_%s_en".format(footerLine.getKey.toLowerCase), footerLine.getValue)
     }
 
     parseDiffs(repository, commit, walk, inputDocument)
@@ -64,11 +86,11 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
   }
 
   /*
-    TODO: Index diffs line-by-line, noting additions and deletions.
-
-    There is a lot of work that can be done here. The diff format (broken down into files and chunks) lends itself well
-    to indexing. It would be great if Solr could not only index diffs line-by-line (noting additions and deletions),
-    but also files and chunks the changes occurred in.
+   * TODO: Index diffs line-by-line, noting additions and deletions.
+   *
+   * There is a lot of work that can be done here. The diff format (broken down into files and chunks) lends itself well
+   * to indexing. It would be great if Solr could not only index diffs line-by-line (noting additions and deletions),
+   * but also files and chunks the changes occurred in.
    */
   protected def parseDiffs(repository: Repository, commit: RevCommit, walk: RevWalk, inputDocument: SolrInputDocument) {
     if (commit.getParentCount > 0) {
@@ -82,7 +104,14 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
 
       diffFormatter.format(parent.getTree, commit.getTree)
 
-      inputDocument.addField("commit_diff_t", new String(diffOutputStream.toByteArray))
+      val diffOutputStreamSize = diffOutputStream.size / 1048576
+
+      // TODO: Index large diffs without bringing down the entire indexer.
+      if (diffOutputStreamSize > 10) {
+        log.info("Diff for commit [%s] is %sMB, too large for indexing.".format(commit.getId.getName, diffOutputStreamSize))
+      } else {
+        inputDocument.addField("commit_diff_t", new String(diffOutputStream.toByteArray))
+      }
     }
   }
 }

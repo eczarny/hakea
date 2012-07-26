@@ -10,17 +10,12 @@ sealed trait ProjectProcessorRequest
 
 case class StartIndexing(projects: List[Project]) extends ProjectProcessorRequest
 
-case object StopIndexing extends ProjectProcessorRequest
-
 class ProjectProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
   protected val repositoryProcessor = context.actorOf(Props(new RepositoryProcessor(configuration)), "repositoryProcessor")
 
   def receive = {
     case StartIndexing(projects) => projects.foreach { project =>
       repositoryProcessor ! CheckRepositoryForChanges(project)
-    }
-    case StopIndexing => {
-      log.info("Shutting down all Hakea processors...")
     }
   }
 }

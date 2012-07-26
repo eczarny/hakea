@@ -11,11 +11,9 @@ import com.yammer.dropwizard.Logging
 import org.apache.solr.client.solrj.response.UpdateResponse
 import org.apache.solr.common.SolrInputDocument
 
-import scala.collection.JavaConverters._
-
 sealed trait InputDocumentDispatcherRequest
 
-case class DispatchInputDocuments(inputDocuments: Seq[SolrInputDocument]) extends InputDocumentDispatcherRequest
+case class DispatchInputDocument(inputDocument: SolrInputDocument) extends InputDocumentDispatcherRequest
 
 case object CommitInputDocuments extends InputDocumentDispatcherRequest
 
@@ -26,32 +24,24 @@ class InputDocumentDispatcher(configuration: HakeaConfiguration) extends Actor w
 
   implicit private val executionContext = ExecutionContext.defaultExecutionContext(context.system)
 
-  context.system.scheduler.schedule(5 minutes, 2 minutes) {
+  context.system.scheduler.schedule(5 minutes, 10 minutes) {
     self ! CommitInputDocuments
   }
 
   def receive = {
-    case DispatchInputDocuments(inputDocuments) => {
-      val replyTo = sender
-
-      log.debug("Dispatching %s input document(s) to Solr.".format(inputDocuments.size))
+    case DispatchInputDocument(inputDocument) => {
+      log.debug("Dispatching input document to Solr.")
 
       Future {
-        solrServer.add(inputDocuments.asJava)
+        solrServer.add(inputDocument)
       } onSuccess {
         case response: UpdateResponse if response.getStatus == 0 => {
-          log.debug("Successfully dispatched %s input document(s).".format(inputDocuments.size))
+          log.debug("Successfully dispatched input document.")
 
           commitRequired = true
-
-          if ((currentTime - previousCommitTime) > 30L) {
-            self ! CommitInputDocuments
-          }
         }
         case _ => {
-          log.error("Unable to disatpch input documents, placing back in queue.")
-
-          replyTo ! EnqueueInputDocuments(inputDocuments)
+          log.error("Unable to disatpch input document.")
         }
       }
     }
