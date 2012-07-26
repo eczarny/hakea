@@ -60,7 +60,7 @@ class FileIndexProcessor(configuration: HakeaConfiguration) extends Actor with L
  */
 class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging {
   protected val inputDocumentDispatcher =
-    context.actorOf(Props(new InputDocumentDispatcher(configuration)), "inputDocumentDispatcher")
+    context.actorFor("/user/projectProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
 
   protected val indexProcessor = context.actorFor("/user/projectProcessor/repositoryProcessor/indexProcessor")
 

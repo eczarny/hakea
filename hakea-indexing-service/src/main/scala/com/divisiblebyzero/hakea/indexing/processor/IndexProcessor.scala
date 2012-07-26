@@ -3,6 +3,7 @@ package com.divisiblebyzero.hakea.indexing.processor
 import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.indexing.solr.{ CommitInputDocuments, InputDocumentDispatcher }
 import com.divisiblebyzero.hakea.model.Project
 import com.yammer.dropwizard.Logging
 import org.eclipse.jgit.lib.{ Ref, Repository }
@@ -22,6 +23,9 @@ class IndexProcessor(configuration: HakeaConfiguration) extends Actor with Loggi
   protected val fileIndexProcessor =
     context.actorOf(Props(new FileIndexProcessor(configuration)), "fileIndexProcessor")
 
+  protected val inputDocumentDispatcher =
+    context.actorOf(Props(new InputDocumentDispatcher(configuration)), "inputDocumentDispatcher")
+
   def receive = {
     case IndexRepositoryFor(project, repository, refs) => {
       commitIndexProcessor ! IndexCommitsFor(project, repository, refs)
@@ -33,6 +37,8 @@ class IndexProcessor(configuration: HakeaConfiguration) extends Actor with Loggi
     }
     case FinishedIndexingFilesFor(project, repository, refs) => {
       log.info("Finished indexing files for %s.".format(project.name))
+
+      inputDocumentDispatcher ! CommitInputDocuments
     }
   }
 }
