@@ -77,7 +77,7 @@ class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Loggin
     inputDocument.addField("commit_short_message_en", commit.getShortMessage)
 
     commit.getFooterLines.filterNot(_.getValue.isEmpty).foreach { footerLine =>
-      inputDocument.addField("commit_footer_line_%s_en".format(footerLine.getKey.toLowerCase), footerLine.getValue)
+      inputDocument.addField("commit_footer_line_%s_en".format(footerLine.getKey.toLowerCase.replace("-", "_")), footerLine.getValue)
     }
 
     parseDiffs(repository, commit, walk, inputDocument)
