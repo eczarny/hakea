@@ -48,7 +48,7 @@ class RepositoryProcessor(configuration: HakeaConfiguration) extends Actor with 
             indexProcessor ! IndexRepositoryFor(project, repository, updatedRefs.toList)
           }
           case _ => {
-            log.info("The %s repository has not changed.".format(project.name))
+            log.debug("The %s repository has not changed.".format(project.name))
           }
         }
       }

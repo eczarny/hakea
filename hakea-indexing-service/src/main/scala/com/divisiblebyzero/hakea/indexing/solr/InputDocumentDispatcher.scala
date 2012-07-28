@@ -37,7 +37,7 @@ class InputDocumentDispatcher(configuration: HakeaConfiguration) extends Actor w
         solrServer.commit()
       } onSuccess {
         case response: UpdateResponse if response.getStatus == 0 => {
-          log.info("Successfully committed input documents.")
+          log.debug("Successfully committed input documents.")
         }
       }
     }
