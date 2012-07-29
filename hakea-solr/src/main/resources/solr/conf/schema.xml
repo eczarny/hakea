@@ -12,38 +12,26 @@
      ANY KIND, either express or implied. See the License for the specific language
      governing permissions and limitations under the License.
   -->
-
-<!-- This is the Solr schema file. This file should be named "schema.xml" and should be in
-     the conf directory under the solr home (i.e. ./solr/conf/schema.xml by default) or
-     located where the classloader for the Solr webapp can find it.
-
-     This example schema is the recommended starting point for users. It should be kept
-     correct and concise, usable out-of-the-box.
-
-     For more information, on how to customize this file, please see:
-
-       http://wiki.apache.org/solr/SchemaXml
-
-     PERFORMANCE NOTE: This schema includes many optional features and should not be used
-     for benchmarking. To improve performance one could:
-
-   - Set stored="false" for all fields possible (esp large fields) when you only need to
-     search on the field but don't need to return the original value.
-   - Set indexed="false" if you don't need to search on the field, but only return the
-     field as a result of searching on other indexed fields.
-   - Remove all unneeded copyField statements.
-   - For best index size and searching performance, set "index" to false for all general
-     text fields, use copyField to copy them to the catchall "text" field, and use that
-     for searching.
-   - For maximum indexing performance, use the StreamingUpdateSolrServer Java client.
-   - Remember to run the JVM in server mode, and use a higher logging level that avoids
-     logging every request.
-  -->
 <schema name="hakea" version="1.5">
     <fields>
         <field name="_version_" type="long" indexed="true" stored="true"/>
 
         <field name="id" type="string" indexed="true" stored="true" required="true"/>
+        <field name="project" type="string" indexed="true" stored="true" required="true"/>
+        <field name="refs" type="string" indexed="true" stored="true" multiValued="true"/>
+
+        <field name="commit_author_name" type="text_general" indexed="true" stored="true"/>
+        <field name="commit_author_email" type="string" indexed="true" stored="true"/>
+        <field name="commit_author_date" type="date" indexed="true" stored="true"/>
+        <field name="commit_committer_name" type="text_general" indexed="true" stored="true"/>
+        <field name="commit_committer_email" type="string" indexed="true" stored="true"/>
+        <field name="commit_committer_date" type="date" indexed="true" stored="true"/>
+        <field name="commit_full_message" type="text_en" indexed="true" stored="true"/>
+        <field name="commit_short_message" type="text_en" indexed="true" stored="true"/>
+        <field name="commit_diff" type="text_general" indexed="true" stored="true"/>
+
+        <field name="file_path" type="string" indexed="true" stored="true"/>
+        <field name="file_content" type="text_general" indexed="true" stored="true"/>
 
         <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
 

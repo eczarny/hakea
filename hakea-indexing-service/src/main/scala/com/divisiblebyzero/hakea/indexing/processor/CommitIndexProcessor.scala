@@ -64,17 +64,17 @@ class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Loggin
     inputDocument.addField("id", "commit::%s".format(commit.getId.name))
 
     // TODO: Find a way of indexing the refs a commit belongs to.
-//    inputDocument.addField("ref_s", ref.getName)
-    inputDocument.addField("project_s", project.name)
+//    inputDocument.addField("refs", ref.getName)
+    inputDocument.addField("project", project.name)
 
-    inputDocument.addField("commit_author_name_t", commit.getAuthorIdent.getName)
-    inputDocument.addField("commit_author_email_s", commit.getAuthorIdent.getEmailAddress)
-    inputDocument.addField("commit_author_date_dt", commit.getAuthorIdent.getWhen)
-    inputDocument.addField("commit_committer_name_t", commit.getCommitterIdent.getName)
-    inputDocument.addField("commit_committer_email_s", commit.getCommitterIdent.getEmailAddress)
-    inputDocument.addField("commit_committer_date_dt", commit.getCommitterIdent.getWhen)
-    inputDocument.addField("commit_full_message_en", commit.getFullMessage)
-    inputDocument.addField("commit_short_message_en", commit.getShortMessage)
+    inputDocument.addField("commit_author_name", commit.getAuthorIdent.getName)
+    inputDocument.addField("commit_author_email", commit.getAuthorIdent.getEmailAddress)
+    inputDocument.addField("commit_author_date", commit.getAuthorIdent.getWhen)
+    inputDocument.addField("commit_committer_name", commit.getCommitterIdent.getName)
+    inputDocument.addField("commit_committer_email", commit.getCommitterIdent.getEmailAddress)
+    inputDocument.addField("commit_committer_date", commit.getCommitterIdent.getWhen)
+    inputDocument.addField("commit_full_message", commit.getFullMessage)
+    inputDocument.addField("commit_short_message", commit.getShortMessage)
 
     commit.getFooterLines.filterNot(_.getValue.isEmpty).foreach { footerLine =>
       inputDocument.addField("commit_footer_line_%s_en".format(footerLine.getKey.toLowerCase.replace("-", "_")), footerLine.getValue)
@@ -110,7 +110,7 @@ class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Loggin
       if (diffOutputStreamSize > 10) {
         log.info("Diff for commit [%s] is %sMB, too large for indexing.".format(commit.getId.getName, diffOutputStreamSize))
       } else {
-        inputDocument.addField("commit_diff_t", new String(diffOutputStream.toByteArray))
+        inputDocument.addField("commit_diff", new String(diffOutputStream.toByteArray))
       }
     }
   }

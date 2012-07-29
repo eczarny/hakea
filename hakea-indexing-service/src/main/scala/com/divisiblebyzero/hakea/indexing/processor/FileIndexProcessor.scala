@@ -74,11 +74,11 @@ class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging 
 
         inputDocument.addField("id", "file::%s::%s".format(ref.getName, objectId.getName))
 
-        inputDocument.addField("ref_s", ref.getName)
-        inputDocument.addField("project_s", project.name)
+        inputDocument.addField("refs", ref.getName)
+        inputDocument.addField("project", project.name)
 
-        inputDocument.addField("file_path_s", path)
-        inputDocument.addField("file_content_t", new String(loader.getCachedBytes))
+        inputDocument.addField("file_path", path)
+        inputDocument.addField("file_content", new String(loader.getCachedBytes))
 
         inputDocument
       } onSuccess {
