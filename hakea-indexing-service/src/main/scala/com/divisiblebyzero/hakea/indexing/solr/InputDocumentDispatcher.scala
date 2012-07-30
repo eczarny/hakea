@@ -28,7 +28,7 @@ class InputDocumentDispatcher(configuration: HakeaConfiguration) extends Actor w
           log.debug("Successfully dispatched input document.")
         }
         case _ => {
-          log.error("Unable to disatpch input document.")
+          log.error("Unable to dispatch input document.")
         }
       }
     }
