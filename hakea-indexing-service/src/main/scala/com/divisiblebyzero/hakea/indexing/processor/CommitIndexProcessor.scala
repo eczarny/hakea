@@ -32,7 +32,7 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
 
       walk.markStart(refs.map(ref => walk.parseCommit(ref.getObjectId)))
 
-      log.info("Indexing commit history of %s.".format(project.name))
+      log.info("Indexing commit history of %s for refs: %s".format(project.name, refs.map(_.getName)))
 
       walk.foreach { commit =>
         commitIndexer ! IndexCommit(project, repository, commit, walk)

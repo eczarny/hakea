@@ -45,7 +45,7 @@ class RepositoryProcessor(configuration: HakeaConfiguration) extends Actor with 
           }
         } onSuccess {
           case updatedRefs: List[_] if !updatedRefs.isEmpty => {
-            indexProcessor ! IndexRepositoryFor(project, repository, updatedRefs.toList)
+            indexProcessor ! IndexRepositoryFor(project, repository, updatedRefs)
           }
           case _ => {
             log.debug("The %s repository has not changed.".format(project.name))
