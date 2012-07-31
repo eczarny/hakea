@@ -93,8 +93,46 @@
 
     <requestHandler name="/select" class="solr.SearchHandler">
         <lst name="defaults">
+            <str name="defType">edismax</str>
+
+            <float name="tie">0.1</float>
+
+            <str name="qf">
+              project^10
+              refs^10
+              commit_author_name^20
+              commit_author_email^20
+              commit_author_date^10
+              commit_committer_name^20
+              commit_committer_email^20
+              commit_committer_date^10
+              commit_full_message^80
+              commit_short_message^80
+              commit_diff^100
+              file_path^20
+              file_content^150
+            </str>
+
+            <str name="pf">
+              refs^5
+              commit_author_name^10
+              commit_author_email^10
+              commit_author_date^5
+              commit_committer_name^10
+              commit_committer_email^10
+              commit_committer_date^5
+              commit_full_message^40
+              commit_short_message^40
+              commit_diff^50
+              file_content^75
+            </str>
+
+            <!--<str name="group">true</str>-->
+            <!--<str name="group.field">id</str>-->
+            <!--<str name="group.limit">-1</str>-->
+
             <str name="echoParams">explicit</str>
-            <int name="rows">10</int>
+            <int name="rows">25</int>
             <str name="df">text</str>
         </lst>
     </requestHandler>
