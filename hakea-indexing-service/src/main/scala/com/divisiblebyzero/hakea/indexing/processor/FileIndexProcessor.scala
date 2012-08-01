@@ -1,16 +1,20 @@
 package com.divisiblebyzero.hakea.indexing.processor
 
+import java.io.File
+
 import akka.actor.{ Actor, Props }
 import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.divisiblebyzero.hakea.indexing.solr.{ DispatchInputDocument, InputDocumentDispatcher }
+import com.divisiblebyzero.hakea.indexing.solr.DispatchInputDocument
 import com.yammer.dropwizard.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.lib.{ ObjectId, Ref, Repository }
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
+
+import scala.util.matching.Regex
 
 sealed trait FileIndexProcessorRequest
 
@@ -51,6 +55,11 @@ class FileIndexProcessor(configuration: HakeaConfiguration) extends Actor with L
   }
 }
 
+object FileIndexer {
+  val PackageRegex = """^package\s+([\w\.\d]+)""".r
+  val ImportRegex = """^import\s+(.+)[\n|;]""".r
+}
+
 /*
  * TODO: Indexing files line-by-line may make it easier to deliver hits as snippets of code.
  *
@@ -71,14 +80,14 @@ class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging 
       Future {
         val inputDocument = new SolrInputDocument
         val loader = repository.open(objectId)
+        val file = new File(path)
+        val content = new String(loader.getCachedBytes)
 
         inputDocument.addField("id", "file::%s::%s".format(ref.getName, objectId.getName))
 
-        inputDocument.addField("refs", ref.getName)
         inputDocument.addField("project", project.name)
 
-        inputDocument.addField("file_path", path)
-        inputDocument.addField("file_content", new String(loader.getCachedBytes))
+        parseFile(inputDocument, file, content)
 
         inputDocument
       } onSuccess {
@@ -91,4 +100,28 @@ class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging 
       indexProcessor ! FinishedIndexingFilesFor(project, repository, refs)
     }
   }
+
+  protected def parseFile(inputDocument: SolrInputDocument, file: File, content: String) {
+    import FileIndexer._
+
+    val filePath = file.getAbsolutePath
+    val fileName = file.getName
+    val fileExtension = fileName.lastIndexOf(".") match {
+      case i: Int if i > 0 => fileName.substring(i + 1)
+      case _               => ""
+    }
+
+    inputDocument.addField("file_path", filePath)
+    inputDocument.addField("file_name", fileName)
+    inputDocument.addField("file_extension", fileExtension)
+    inputDocument.addField("file_content", content)
+
+    content.split("\n").foreach { line =>
+      parseLine(PackageRegex, line).foreach(inputDocument.addField("file_packages", _))
+      parseLine(ImportRegex, line).foreach(inputDocument.addField("file_imports", _))
+    }
+  }
+
+  protected def parseLine(regex: Regex, line: String) =
+    regex.findFirstMatchIn(line).map(_.group(1))
 }

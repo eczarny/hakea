@@ -6,7 +6,7 @@ import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.divisiblebyzero.hakea.indexing.solr.{ DispatchInputDocument, InputDocumentDispatcher }
+import com.divisiblebyzero.hakea.indexing.solr.DispatchInputDocument
 import com.yammer.dropwizard.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.diff._
@@ -63,8 +63,6 @@ class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Loggin
 
     inputDocument.addField("id", "commit::%s".format(commit.getId.name))
 
-    // TODO: Find a way of indexing the refs a commit belongs to.
-//    inputDocument.addField("refs", ref.getName)
     inputDocument.addField("project", project.name)
 
     inputDocument.addField("commit_author_name", commit.getAuthorIdent.getName)

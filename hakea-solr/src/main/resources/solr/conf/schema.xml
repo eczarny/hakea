@@ -18,7 +18,6 @@
 
         <field name="id" type="string" indexed="true" stored="true" required="true"/>
         <field name="project" type="string" indexed="true" stored="true" required="true"/>
-        <field name="refs" type="string" indexed="true" stored="true" multiValued="true"/>
 
         <field name="commit_author_name" type="text_general" indexed="true" stored="true"/>
         <field name="commit_author_email" type="string" indexed="true" stored="true"/>
@@ -31,7 +30,12 @@
         <field name="commit_diff" type="text_general" indexed="true" stored="true"/>
 
         <field name="file_path" type="string" indexed="true" stored="true"/>
+        <field name="file_name" type="string" indexed="true" stored="true"/>
+        <field name="file_extension" type="string" indexed="true" stored="true"/>
         <field name="file_content" type="text_general" indexed="true" stored="true"/>
+
+        <field name="file_packages" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="file_imports" type="string" indexed="true" stored="true" multiValued="true"/>
 
         <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
