@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.config
+package com.divisiblebyzero.hakea.indexing.config
 
 import javax.validation.Valid
 
@@ -9,5 +9,5 @@ class ServiceConfiguration extends Configuration {
 
   @Valid
   @JsonProperty
-  val hakea = new HakeaConfiguration
+  val hakea = new DropwizardConfiguration
 }

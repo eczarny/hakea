@@ -7,7 +7,7 @@ import akka.actor.{ Actor, Props }
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.solr.DispatchInputDocument
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.util.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.diff._
 import org.eclipse.jgit.lib.{ Ref, Repository }

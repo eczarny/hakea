@@ -3,9 +3,9 @@ package com.divisiblebyzero.hakea.processor
 import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
-import com.divisiblebyzero.hakea.solr.{ CommitInputDocuments, InputDocumentDispatcher }
 import com.divisiblebyzero.hakea.model.Project
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.solr.{ CommitInputDocuments, InputDocumentDispatcher }
+import com.divisiblebyzero.hakea.util.Logging
 import org.eclipse.jgit.lib.{ Ref, Repository }
 
 sealed trait IndexProcessorRequest

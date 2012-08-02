@@ -1,26 +1,35 @@
 package com.divisiblebyzero.hakea.config
 
-import java.io.File
-import javax.validation.Valid
+import com.divisiblebyzero.hakea.model.Project
+import org.apache.solr.client.solrj.SolrServer
 
-import org.codehaus.jackson.annotate.JsonProperty
-import org.hibernate.validator.constraints.NotEmpty
+trait HakeaConfiguration {
 
-class HakeaConfiguration {
+  def home: String
 
-  @NotEmpty
-  @JsonProperty
-  var home: String = System.getProperty("hakea.home", "~/.hakea").replace("~", System.getProperty("user.home"))
+  def repositoryHome: String
 
-  @NotEmpty
-  @JsonProperty
-  var repositoryHome: String = home + File.separator + "repositories"
+  def projects: List[HakeaProjectConfiguration]
 
-  @Valid
-  @JsonProperty
-  val projects = List.empty[HakeaProjectConfiguration]
+  def solr: HakeaSolrConfiguration
+}
 
-  @Valid
-  @JsonProperty
-  val solr = new HakeaSolrConfiguration
+trait HakeaProjectConfiguration {
+
+  def name: String
+
+  def uri: String
+
+  def toProject: Project
+}
+
+trait HakeaSolrConfiguration {
+
+  def url: String
+
+  def queueSize: Int
+
+  def threadCount: Int
+
+  def toSolrServer: SolrServer
 }

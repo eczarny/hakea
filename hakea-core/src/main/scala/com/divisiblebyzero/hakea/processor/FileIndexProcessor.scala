@@ -8,7 +8,7 @@ import akka.dispatch.{ ExecutionContext, Future }
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.solr.DispatchInputDocument
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.util.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.lib.{ ObjectId, Ref, Repository }
 import org.eclipse.jgit.revwalk.RevWalk

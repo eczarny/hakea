@@ -4,7 +4,7 @@ import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.util.Logging
 
 sealed trait ProjectProcessorRequest
 

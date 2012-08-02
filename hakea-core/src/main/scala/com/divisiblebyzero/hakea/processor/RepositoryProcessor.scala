@@ -8,7 +8,7 @@ import akka.dispatch.{ ExecutionContext, Future }
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.util.RepositoryConversions._
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.util.Logging
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants.R_HEADS
 import org.eclipse.jgit.lib.RefUpdate.Result.NO_CHANGE

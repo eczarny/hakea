@@ -4,7 +4,7 @@ import akka.actor.Actor
 import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
-import com.yammer.dropwizard.Logging
+import com.divisiblebyzero.hakea.util.Logging
 import org.apache.solr.client.solrj.response.UpdateResponse
 import org.apache.solr.common.SolrInputDocument
 
