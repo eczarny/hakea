@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.processor
+package com.divisiblebyzero.hakea.processor
 
 import java.io.File
 
@@ -7,7 +7,7 @@ import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.divisiblebyzero.hakea.indexing.solr.DispatchInputDocument
+import com.divisiblebyzero.hakea.solr.DispatchInputDocument
 import com.yammer.dropwizard.Logging
 import org.apache.solr.common.SolrInputDocument
 import org.eclipse.jgit.lib.{ ObjectId, Ref, Repository }

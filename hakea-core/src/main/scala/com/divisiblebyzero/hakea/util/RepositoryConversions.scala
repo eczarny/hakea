@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.util
+package com.divisiblebyzero.hakea.util
 
 import java.io.File
 

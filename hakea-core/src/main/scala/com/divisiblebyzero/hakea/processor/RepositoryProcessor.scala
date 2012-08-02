@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.processor
+package com.divisiblebyzero.hakea.processor
 
 import java.io.File
 
@@ -7,7 +7,7 @@ import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
-import com.divisiblebyzero.hakea.indexing.util.RepositoryConversions._
+import com.divisiblebyzero.hakea.util.RepositoryConversions._
 import com.yammer.dropwizard.Logging
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants.R_HEADS

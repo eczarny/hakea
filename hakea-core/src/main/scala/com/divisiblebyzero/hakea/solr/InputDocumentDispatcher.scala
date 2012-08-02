@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.solr
+package com.divisiblebyzero.hakea.solr
 
 import akka.actor.Actor
 import akka.dispatch.{ ExecutionContext, Future }

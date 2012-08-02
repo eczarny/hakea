@@ -1,9 +1,9 @@
-package com.divisiblebyzero.hakea.indexing.processor
+package com.divisiblebyzero.hakea.processor
 
 import akka.actor.{ Actor, Props }
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
-import com.divisiblebyzero.hakea.indexing.solr.{ CommitInputDocuments, InputDocumentDispatcher }
+import com.divisiblebyzero.hakea.solr.{ CommitInputDocuments, InputDocumentDispatcher }
 import com.divisiblebyzero.hakea.model.Project
 import com.yammer.dropwizard.Logging
 import org.eclipse.jgit.lib.{ Ref, Repository }

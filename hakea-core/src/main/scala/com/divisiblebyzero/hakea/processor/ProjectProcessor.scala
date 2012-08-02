@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.processor
+package com.divisiblebyzero.hakea.processor
 
 import akka.actor.{ Actor, Props }
 
