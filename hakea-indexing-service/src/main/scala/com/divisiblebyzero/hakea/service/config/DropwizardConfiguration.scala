@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.config
+package com.divisiblebyzero.hakea.service.config
 
 import java.io.File
 import javax.validation.Valid

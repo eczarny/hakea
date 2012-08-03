@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.resource
+package com.divisiblebyzero.hakea.service.resource
 
 import javax.ws.rs._
 import javax.ws.rs.core._

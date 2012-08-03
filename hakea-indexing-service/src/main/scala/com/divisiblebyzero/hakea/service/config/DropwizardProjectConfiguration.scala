@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.config
+package com.divisiblebyzero.hakea.service.config
 
 import com.divisiblebyzero.hakea.config.HakeaProjectConfiguration
 import com.divisiblebyzero.hakea.model.Project

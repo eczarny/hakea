@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.config
+package com.divisiblebyzero.hakea.service.config
 
 import com.divisiblebyzero.hakea.config.HakeaSolrConfiguration
 import org.apache.solr.client.solrj.SolrServer

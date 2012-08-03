@@ -1,4 +1,4 @@
-package com.divisiblebyzero.hakea.indexing.managed
+package com.divisiblebyzero.hakea.service.managed
 
 import akka.actor.{ ActorSystem, Props }
 import akka.util.duration._
