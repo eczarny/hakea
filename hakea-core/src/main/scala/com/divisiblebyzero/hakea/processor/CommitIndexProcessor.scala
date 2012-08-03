@@ -61,7 +61,7 @@ class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Loggin
   protected def commitToInputDocument(project: Project, repository: Repository, commit: RevCommit, walk: RevWalk) = {
     val inputDocument = new SolrInputDocument
 
-    inputDocument.addField("id", "commit::%s".format(commit.getId.name))
+    inputDocument.addField("id", "commit::%s::%s".format(project.name, commit.getId.name))
 
     inputDocument.addField("project", project.name)
 

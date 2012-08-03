@@ -83,7 +83,7 @@ class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging 
         val file = new File(path)
         val content = new String(loader.getCachedBytes)
 
-        inputDocument.addField("id", "file::%s::%s".format(ref.getName, objectId.getName))
+        inputDocument.addField("id", "file::%s::%s".format(project.name, objectId.getName))
 
         inputDocument.addField("project", project.name)
 

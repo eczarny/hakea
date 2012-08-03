@@ -69,7 +69,7 @@
         <listener event="firstSearcher" class="solr.QuerySenderListener">
             <arr name="queries">
                 <lst>
-                    <str name="q">static firstSearcher warming in solrconfig.xml</str>
+                    <str name="q">*:*</str>
                 </lst>
             </arr>
         </listener>
@@ -99,7 +99,6 @@
 
             <str name="qf">
               project^10
-              refs^10
               commit_author_name^20
               commit_author_email^20
               commit_author_date^10
@@ -110,11 +109,13 @@
               commit_short_message^80
               commit_diff^100
               file_path^20
+              file_name^20
               file_content^150
+              file_packages^40
+              file_imports^40
             </str>
 
             <str name="pf">
-              refs^5
               commit_author_name^10
               commit_author_email^10
               commit_author_date^5
@@ -127,13 +128,15 @@
               file_content^75
             </str>
 
-            <!--<str name="group">true</str>-->
-            <!--<str name="group.field">id</str>-->
-            <!--<str name="group.limit">-1</str>-->
+            <str name="group">true</str>
+            <str name="group.field">id</str>
+            <str name="group.limit">-1</str>
+
+            <str name="hl">true</str>
+            <str name="hl.fl">commit_full_message,commit_short_message,commit_diff,file_content</str>
 
             <str name="echoParams">explicit</str>
             <int name="rows">25</int>
-            <str name="df">text</str>
         </lst>
     </requestHandler>
 
