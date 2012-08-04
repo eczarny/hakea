@@ -6,11 +6,11 @@ import com.divisiblebyzero.hakea.config.HakeaConfiguration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.util.Logging
 
-sealed trait ProjectProcessorRequest
+sealed trait HakeaProcessorRequest
 
-case class StartIndexing(projects: List[Project]) extends ProjectProcessorRequest
+case class StartIndexing(projects: List[Project]) extends HakeaProcessorRequest
 
-class ProjectProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
+class HakeaProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
   protected val repositoryProcessor = context.actorOf(Props(new RepositoryProcessor(configuration)), "repositoryProcessor")
 
   def receive = {

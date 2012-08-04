@@ -45,9 +45,9 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
 
 class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Logging {
   protected val inputDocumentDispatcher =
-    context.actorFor("/user/projectProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
+    context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
 
-  protected val indexProcessor = context.actorFor("/user/projectProcessor/repositoryProcessor/indexProcessor")
+  protected val indexProcessor = context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor")
 
   def receive = {
     case IndexCommit(project, repository, commit, walk) => {
