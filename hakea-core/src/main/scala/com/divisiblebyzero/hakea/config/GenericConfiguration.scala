@@ -10,10 +10,10 @@ class GenericConfiguration(config: Config) extends HakeaConfiguration {
 
   val repositoryHome = defaultRepositoryHome
 
-  val projects =
+  lazy val projects =
     config.getConfigList("projects").map(new GenericProjectConfiguration(_)).toList
 
-  val solr = new GenericSolrConfiguration(config.getConfig("solr"))
+  lazy val solr = new GenericSolrConfiguration(config.getConfig("solr"))
 }
 
 class GenericProjectConfiguration(config: Config) extends HakeaProjectConfiguration {
