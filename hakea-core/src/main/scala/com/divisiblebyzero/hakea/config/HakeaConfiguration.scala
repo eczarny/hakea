@@ -1,7 +1,9 @@
 package com.divisiblebyzero.hakea.config
 
+import java.io.File
+
 import com.divisiblebyzero.hakea.model.Project
-import org.apache.solr.client.solrj.SolrServer
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 
 trait HakeaConfiguration {
 
@@ -12,6 +14,13 @@ trait HakeaConfiguration {
   def projects: List[HakeaProjectConfiguration]
 
   def solr: HakeaSolrConfiguration
+
+  protected def defaultHome(hakeaHome: String = "~/.hakea") =
+    System.getProperty("hakea.home", hakeaHome).replace("~", userHome)
+
+  protected def userHome = System.getProperty("user.home")
+
+  protected def defaultRepositoryHome = home + File.separator + "repositories"
 }
 
 trait HakeaProjectConfiguration {
@@ -20,7 +29,7 @@ trait HakeaProjectConfiguration {
 
   def uri: String
 
-  def toProject: Project
+  def toProject = Project(name, uri)
 }
 
 trait HakeaSolrConfiguration {
@@ -31,5 +40,5 @@ trait HakeaSolrConfiguration {
 
   def threadCount: Int
 
-  def toSolrServer: SolrServer
+  def toSolrServer = new ConcurrentUpdateSolrServer(url, queueSize, threadCount)
 }

@@ -1,6 +1,5 @@
 package com.divisiblebyzero.hakea.service.config
 
-import java.io.File
 import javax.validation.Valid
 
 import com.divisiblebyzero.hakea.config.HakeaConfiguration
@@ -11,11 +10,11 @@ class DropwizardConfiguration extends HakeaConfiguration {
 
   @NotEmpty
   @JsonProperty
-  var home: String = System.getProperty("hakea.home", "~/.hakea").replace("~", System.getProperty("user.home"))
+  var home: String = defaultHome()
 
   @NotEmpty
   @JsonProperty
-  var repositoryHome: String = home + File.separator + "repositories"
+  var repositoryHome: String = defaultRepositoryHome
 
   @Valid
   @JsonProperty
