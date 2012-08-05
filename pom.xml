@@ -35,7 +35,7 @@
     </developers>
 
     <modules>
-        <module>hakea-core</module>
+        <module>hakea-indexing-core</module>
         <module>hakea-indexing-service</module>
         <module>hakea-solr</module>
     </modules>

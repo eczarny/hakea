@@ -10,11 +10,11 @@ The Hakea [Git] [1] repository and source code indexer.
 
 Hakea is broken up into three major components:
 
-1. The core library
+1. The core indexing library
 2. The indexing service
 3. The Solr distribution
 
-This design aims to separate the concerns of indexing from the implementation of the indexer itself. Consumers of the core library can utilize the available processors to index an arbitrary collection of projects, or Git repositories.
+This design aims to separate the concerns of indexing from the implementation of the indexer itself. Consumers of the core indexing library can utilize the available processors to index an arbitrary collection of projects, or Git repositories.
 
 Hakea's default indexer implementation is the indexing service, which has been built on top of [Dropwizard] [4].
 
@@ -22,7 +22,7 @@ Use Maven to build each component:
 
     $ mvn package
 
-The core library is packaged as a `JAR`, the indexing service is packaged as a "fat" `JAR`, and the Solr distribution is packaged as a `ZIP` archive.
+The core indexing library is packaged as a `JAR`, the indexing service is packaged as a "fat" `JAR`, and the Solr distribution is packaged as a `ZIP` archive.
 
 Move the Solr distribution out of the `hakea-solr/target/` directory and to someplace else Maven cannot accidentally delete it. Decompress the archive and start Solr:
 

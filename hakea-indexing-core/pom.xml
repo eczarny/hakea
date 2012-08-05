@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>hakea-core</artifactId>
+    <artifactId>hakea-indexing-core</artifactId>
 
     <dependencies>
         <dependency>
