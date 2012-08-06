@@ -5,7 +5,7 @@ import java.io.File
 import akka.actor.{ Actor, Props }
 import akka.dispatch.{ ExecutionContext, Future }
 
-import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.solr.DispatchInputDocument
 import com.divisiblebyzero.hakea.util.Logging
@@ -24,7 +24,7 @@ case class IndexFile(project: Project, repository: Repository, ref: Ref, objectI
 
 case class FileIndexingComplete(project: Project, repository: Repository, refs: List[Ref]) extends FileIndexProcessorRequest
 
-class FileIndexProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
+class FileIndexProcessor(configuration: Configuration) extends Actor with Logging {
   protected val fileIndexer = context.actorOf(Props(new FileIndexer(configuration)), "fileIndexer")
 
   def receive = {
@@ -67,7 +67,7 @@ object FileIndexer {
  * making it possible to display hits a snippets of code. It would also make it possible to filter results by line
  * number, which could have relevant use cases.
  */
-class FileIndexer(configuration: HakeaConfiguration) extends Actor with Logging {
+class FileIndexer(configuration: Configuration) extends Actor with Logging {
   protected val inputDocumentDispatcher =
     context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
 

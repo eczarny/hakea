@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import akka.actor.{ Actor, Props }
 
-import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.solr.DispatchInputDocument
 import com.divisiblebyzero.hakea.util.Logging
@@ -23,7 +23,7 @@ case class IndexCommit(project: Project, repository: Repository, commit: RevComm
 
 case class CommitIndexingComplete(project: Project, repository: Repository, refs: List[Ref]) extends CommitIndexProcessorRequest
 
-class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
+class CommitIndexProcessor(configuration: Configuration) extends Actor with Logging {
   protected val commitIndexer = context.actorOf(Props(new CommitIndexer(configuration)), "commitIndexer")
 
   def receive = {
@@ -43,7 +43,7 @@ class CommitIndexProcessor(configuration: HakeaConfiguration) extends Actor with
   }
 }
 
-class CommitIndexer(configuration: HakeaConfiguration) extends Actor with Logging {
+class CommitIndexer(configuration: Configuration) extends Actor with Logging {
   protected val inputDocumentDispatcher =
     context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
 

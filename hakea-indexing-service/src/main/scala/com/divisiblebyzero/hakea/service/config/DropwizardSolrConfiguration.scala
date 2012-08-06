@@ -1,10 +1,10 @@
 package com.divisiblebyzero.hakea.service.config
 
-import com.divisiblebyzero.hakea.config.HakeaSolrConfiguration
+import com.divisiblebyzero.hakea.config.SolrConfiguration
 import org.codehaus.jackson.annotate.JsonProperty
 import org.hibernate.validator.constraints.NotEmpty
 
-class DropwizardSolrConfiguration extends HakeaSolrConfiguration {
+class DropwizardSolrConfiguration extends SolrConfiguration {
 
   @NotEmpty
   @JsonProperty

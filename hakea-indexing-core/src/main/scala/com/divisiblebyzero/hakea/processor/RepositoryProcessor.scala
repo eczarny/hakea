@@ -5,7 +5,7 @@ import java.io.File
 import akka.actor.{ Actor, Props }
 import akka.dispatch.{ ExecutionContext, Future }
 
-import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.util.RepositoryConversions._
 import com.divisiblebyzero.hakea.util.Logging
@@ -22,7 +22,7 @@ case class CheckRepositoryForChanges(project: Project) extends RepositoryProcess
 
 case class CloneRepository(project: Project) extends RepositoryProcessorRequest
 
-class RepositoryProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
+class RepositoryProcessor(configuration: Configuration) extends Actor with Logging {
   protected val indexProcessor = context.actorOf(Props(new IndexProcessor(configuration)), "indexProcessor")
 
   implicit private val executionContext = ExecutionContext.defaultExecutionContext(context.system)

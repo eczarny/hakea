@@ -3,11 +3,11 @@ package com.divisiblebyzero.hakea.service.managed
 import akka.actor.{ ActorSystem, Props }
 import akka.util.duration._
 
-import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.processor.{ HakeaProcessor, StartIndexing }
 import com.yammer.dropwizard.Logging
 
-class ManagedAkkaIndexer(configuration: HakeaConfiguration) extends ManagedIndexer(configuration) with Logging {
+class ManagedAkkaIndexer(configuration: Configuration) extends ManagedIndexer(configuration) with Logging {
   protected val system = ActorSystem("hakea")
 
   protected val hakeaProcessor =

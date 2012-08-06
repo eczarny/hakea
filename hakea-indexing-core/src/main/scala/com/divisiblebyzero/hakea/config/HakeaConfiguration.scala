@@ -1,44 +1,38 @@
 package com.divisiblebyzero.hakea.config
 
-import java.io.File
+import com.typesafe.config.{ Config, ConfigFactory }
 
-import com.divisiblebyzero.hakea.model.Project
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
+import scala.collection.JavaConversions._
 
-trait HakeaConfiguration {
+object HakeaConfiguration {
 
-  def home: String
-
-  def repositoryHome: String
-
-  def projects: List[HakeaProjectConfiguration]
-
-  def solr: HakeaSolrConfiguration
-
-  protected def defaultHome(hakeaHome: String = "~/.hakea") =
-    System.getProperty("hakea.home", hakeaHome).replace("~", userHome)
-
-  protected def userHome = System.getProperty("user.home")
-
-  protected def defaultRepositoryHome = home + File.separator + "repositories"
+  def load() = new HakeaConfiguration(ConfigFactory.load().getConfig("hakea"))
 }
 
-trait HakeaProjectConfiguration {
+class HakeaConfiguration(config: Config) extends Configuration {
 
-  def name: String
+  val home = defaultHome()
 
-  def uri: String
+  val repositoryHome = defaultRepositoryHome
 
-  def toProject = Project(name, uri)
+  lazy val projects =
+    config.getConfigList("projects").map(new HakeaProjectConfiguration(_)).toList
+
+  lazy val solr = new HakeaSolrConfiguration(config.getConfig("solr"))
 }
 
-trait HakeaSolrConfiguration {
+class HakeaProjectConfiguration(config: Config) extends ProjectConfiguration {
 
-  def url: String
+  val name = config.getString("name")
 
-  def queueSize: Int
+  val uri = config.getString("uri")
+}
 
-  def threadCount: Int
+class HakeaSolrConfiguration(config: Config) extends SolrConfiguration {
 
-  def toSolrServer = new ConcurrentUpdateSolrServer(url, queueSize, threadCount)
+  val url = config.getString("url")
+
+  val queueSize = config.getInt("queueSize")
+
+  val threadCount = config.getInt("threadCount")
 }

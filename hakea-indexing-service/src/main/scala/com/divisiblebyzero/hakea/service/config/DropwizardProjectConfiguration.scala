@@ -1,10 +1,10 @@
 package com.divisiblebyzero.hakea.service.config
 
-import com.divisiblebyzero.hakea.config.HakeaProjectConfiguration
+import com.divisiblebyzero.hakea.config.ProjectConfiguration
 import org.codehaus.jackson.annotate.JsonProperty
 import org.hibernate.validator.constraints.NotEmpty
 
-class DropwizardProjectConfiguration extends HakeaProjectConfiguration {
+class DropwizardProjectConfiguration extends ProjectConfiguration {
 
   @NotEmpty
   @JsonProperty

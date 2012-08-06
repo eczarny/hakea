@@ -2,7 +2,7 @@ package com.divisiblebyzero.hakea.processor
 
 import akka.actor.{ Actor, Props }
 
-import com.divisiblebyzero.hakea.config.HakeaConfiguration
+import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.solr.{ CommitInputDocuments, InputDocumentDispatcher }
 import com.divisiblebyzero.hakea.util.Logging
@@ -16,7 +16,7 @@ case class FinishedIndexingCommitsFor(project: Project, repository: Repository, 
 
 case class FinishedIndexingFilesFor(project: Project, repository: Repository, refs: List[Ref]) extends IndexProcessorRequest
 
-class IndexProcessor(configuration: HakeaConfiguration) extends Actor with Logging {
+class IndexProcessor(configuration: Configuration) extends Actor with Logging {
   protected val commitIndexProcessor =
     context.actorOf(Props(new CommitIndexProcessor(configuration)), "commitIndexProcessor")
 
