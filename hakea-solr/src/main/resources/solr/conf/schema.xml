@@ -21,12 +21,15 @@
 
         <field name="commit_author_name" type="text_general" indexed="true" stored="true"/>
         <field name="commit_author_email" type="string" indexed="true" stored="true"/>
-        <field name="commit_author_date" type="date" indexed="true" stored="true"/>
+        <field name="commit_authored_at" type="date" indexed="true" stored="true"/>
+
         <field name="commit_committer_name" type="text_general" indexed="true" stored="true"/>
         <field name="commit_committer_email" type="string" indexed="true" stored="true"/>
-        <field name="commit_committer_date" type="date" indexed="true" stored="true"/>
-        <field name="commit_full_message" type="text_en" indexed="true" stored="true"/>
-        <field name="commit_short_message" type="text_en" indexed="true" stored="true"/>
+        <field name="commit_committed_at" type="date" indexed="true" stored="true"/>
+
+        <field name="commit_subject" type="text_en" indexed="true" stored="true"/>
+        <field name="commit_message" type="text_en" indexed="true" stored="true"/>
+
         <field name="commit_diff" type="text_general" indexed="true" stored="true"/>
 
         <field name="file_path" type="string" indexed="true" stored="true"/>

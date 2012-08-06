@@ -67,12 +67,14 @@ class CommitIndexer(configuration: Configuration) extends Actor with Logging {
 
     inputDocument.addField("commit_author_name", commit.getAuthorIdent.getName)
     inputDocument.addField("commit_author_email", commit.getAuthorIdent.getEmailAddress)
-    inputDocument.addField("commit_author_date", commit.getAuthorIdent.getWhen)
+    inputDocument.addField("commit_authored_at", commit.getAuthorIdent.getWhen)
+
     inputDocument.addField("commit_committer_name", commit.getCommitterIdent.getName)
     inputDocument.addField("commit_committer_email", commit.getCommitterIdent.getEmailAddress)
-    inputDocument.addField("commit_committer_date", commit.getCommitterIdent.getWhen)
-    inputDocument.addField("commit_full_message", commit.getFullMessage)
-    inputDocument.addField("commit_short_message", commit.getShortMessage)
+    inputDocument.addField("commit_committed_at", commit.getCommitterIdent.getWhen)
+
+    inputDocument.addField("commit_subject", commit.getShortMessage)
+    inputDocument.addField("commit_message", commit.getFullMessage)
 
     commit.getFooterLines.filterNot(_.getValue.isEmpty).foreach { footerLine =>
       inputDocument.addField("commit_footer_line_%s_en".format(footerLine.getKey.toLowerCase.replace("-", "_")), footerLine.getValue)
