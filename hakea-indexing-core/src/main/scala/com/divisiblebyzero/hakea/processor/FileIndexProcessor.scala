@@ -104,7 +104,7 @@ class FileIndexer(configuration: Configuration) extends Actor with Logging {
   protected def parseFile(inputDocument: SolrInputDocument, file: File, content: String) {
     import FileIndexer._
 
-    val filePath = file.getAbsolutePath
+    val filePath = file.getPath
     val fileName = file.getName
     val fileExtension = fileName.lastIndexOf(".") match {
       case i: Int if i > 0 => fileName.substring(i + 1)
