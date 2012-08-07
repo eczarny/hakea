@@ -24,7 +24,8 @@ class IndexProcessor(configuration: Configuration) extends Actor with Logging {
     context.actorOf(Props(new FileIndexProcessor(configuration)), "fileIndexProcessor")
 
   protected val inputDocumentDispatcher =
-    context.actorOf(Props(new InputDocumentDispatcher(configuration)), "inputDocumentDispatcher")
+    context.actorOf(Props(new InputDocumentDispatcher(configuration))
+                      .withDispatcher("hakea.dispatcher.input-document-dispatcher"), "inputDocumentDispatcher")
 
   def receive = {
     case IndexRepositoryFor(project, repository, refs) => {

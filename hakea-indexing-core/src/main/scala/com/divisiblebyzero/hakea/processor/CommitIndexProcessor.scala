@@ -107,7 +107,7 @@ class CommitIndexer(configuration: Configuration) extends Actor with Logging {
       val diffOutputStreamSize = diffOutputStream.size / 1048576
 
       // TODO: Index large diffs without bringing down the entire indexer.
-      if (diffOutputStreamSize > 10) {
+      if (diffOutputStreamSize > 100) {
         log.info("Diff for commit [%s] is %sMB, too large for indexing.".format(commit.getId.getName, diffOutputStreamSize))
       } else {
         inputDocument.addField("commit_diff", new String(diffOutputStream.toByteArray))

@@ -11,8 +11,8 @@ class DropwizardSolrConfiguration extends SolrConfiguration {
   var url: String = "http://localhost:8983/solr"
 
   @JsonProperty
-  var queueSize: Int = 10
+  var queueSize: Int = 25
 
   @JsonProperty
-  var threadCount: Int = 2
+  var threadCount: Int = 4
 }
