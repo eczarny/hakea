@@ -56,8 +56,8 @@ class FileIndexProcessor(configuration: Configuration) extends Actor with Loggin
 }
 
 object FileIndexer {
-  val PackageRegex = """^package\s+([\w\.\d]+)""".r
-  val ImportRegex = """^import\s+(.+)[\n|;]""".r
+  val PackageRegex = """^package\s+([\w\.]+)""".r
+  val ImportRegex = """import\s+([\w\.\s,\{\}]+);?""".r
 }
 
 /*
@@ -127,5 +127,5 @@ class FileIndexer(configuration: Configuration) extends Actor with Logging {
   }
 
   protected def parseLine(regex: Regex, line: String) =
-    regex.findFirstMatchIn(line).map(_.group(1))
+    regex.findAllIn(line).matchData.map(_.group(1)).toList
 }
