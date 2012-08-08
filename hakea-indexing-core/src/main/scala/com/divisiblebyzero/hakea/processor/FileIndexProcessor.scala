@@ -82,10 +82,14 @@ class FileIndexer(configuration: Configuration) extends Actor with Logging {
         val loader = repository.open(objectId)
         val file = new File(path)
         val content = new String(loader.getCachedBytes)
+        val id =
+          "file::%s::%s::%s".format(project.name, file.getPath, ref.getObjectId.getName)
 
-        inputDocument.addField("id", "file::%s::%s".format(project.name, objectId.getName))
+        inputDocument.addField("id", id)
 
         inputDocument.addField("project", project.name)
+
+        inputDocument.addField("file_ref", ref.getName)
 
         parseFile(inputDocument, file, content)
 
