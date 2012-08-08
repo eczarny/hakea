@@ -125,6 +125,8 @@
               commit_full_message^40
               commit_short_message^40
               commit_diff^50
+              file_path^10
+              file_name^10
               file_content^75
             </str>
 

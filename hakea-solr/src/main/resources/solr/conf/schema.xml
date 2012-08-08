@@ -30,14 +30,14 @@
         <field name="commit_subject" type="text_en" indexed="true" stored="true"/>
         <field name="commit_message" type="text_en" indexed="true" stored="true"/>
 
-        <field name="commit_diff" type="text_general" indexed="true" stored="true"/>
+        <field name="commit_diff" type="text_source_code" indexed="true" stored="true"/>
 
         <field name="file_ref" type="string" indexed="true" stored="true"/>
 
-        <field name="file_path" type="string" indexed="true" stored="true"/>
-        <field name="file_name" type="string" indexed="true" stored="true"/>
+        <field name="file_path" type="text_path" indexed="true" stored="true"/>
+        <field name="file_name" type="text_general_splitting" indexed="true" stored="true"/>
         <field name="file_extension" type="string" indexed="true" stored="true"/>
-        <field name="file_content" type="text_general" indexed="true" stored="true"/>
+        <field name="file_content" type="text_source_code" indexed="true" stored="true"/>
 
         <field name="file_packages" type="string" indexed="true" stored="true" multiValued="true"/>
         <field name="file_imports" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -204,6 +204,40 @@
                 <tokenizer class="solr.PathHierarchyTokenizerFactory"/>
             </analyzer>
         </fieldType>
+
+        <fieldType name="text_general_splitting" class="solr.TextField" positionIncrementGap="100">
+            <analyzer type="index">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
+                <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1"/>
+                <!-- <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/> -->
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
+                <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1"/>
+                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+
+        <fieldType name="text_source_code" class="solr.TextField" positionIncrementGap="100">
+            <analyzer type="index">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
+                <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1"/>
+                <!-- <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/> -->
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
+                <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1"/>
+                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+          </fieldType>
 
         <fieldtype name="phonetic" stored="false" indexed="true" class="solr.TextField">
             <analyzer>
