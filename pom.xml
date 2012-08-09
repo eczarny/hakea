@@ -14,12 +14,12 @@
         <scala.version>2.9.1</scala.version>
 
         <akka.version>2.0.1</akka.version>
-        <dropwizard.version>0.4.4</dropwizard.version>
+        <dropwizard.version>0.5.1</dropwizard.version>
         <jetty.version>8.1.5.v20120716</jetty.version>
         <jgit.version>2.0.0.201206130900-r</jgit.version>
         <junit.version>4.10</junit.version>
         <mockito.version>1.9.0</mockito.version>
-        <scalatest.version>1.6.1</scalatest.version>
+        <scalatest.version>1.8</scalatest.version>
         <slf4j.version>1.6.6</slf4j.version>
         <solr.version>4.0.0-ALPHA</solr.version>
 
