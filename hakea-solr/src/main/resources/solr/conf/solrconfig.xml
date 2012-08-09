@@ -135,7 +135,10 @@
             <str name="group.limit">-1</str>
 
             <str name="hl">true</str>
-            <str name="hl.fl">commit_full_message,commit_short_message,commit_diff,file_content</str>
+            <str name="hl.fl">commit_subject,commit_message,commit_diff,file_content</str>
+            <str name="hl.fragsize">0</str>
+            <str name="hl.simple.pre">{{</str>
+            <str name="hl.simple.post">}}</str>
 
             <str name="echoParams">explicit</str>
             <int name="rows">25</int>
