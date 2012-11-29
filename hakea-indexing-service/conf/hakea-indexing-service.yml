@@ -8,14 +8,14 @@ hakea:
   # The list projects, and their Git URIs, to be indexed by Hakea.
   projects:
     -
+      name: hakea
+      uri: git@github.com:eczarny/hakea.git
+    -
       name: spectacle
-      uri: git://github.com/eczarny/spectacle.git
+      uri: git@github.com:eczarny/spectacle.git
     -
       name: zerokit
-      uri: git://github.com/eczarny/zerokit.git
-    -
-      name: xmlrpc
-      uri: git://github.com/eczarny/xmlrpc.git
+      uri: git@github.com:eczarny/zerokit.git
 
   # The Solr client configuration.
   solr:
