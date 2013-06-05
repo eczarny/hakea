@@ -3,7 +3,6 @@ package com.divisiblebyzero.hakea.processor
 import java.io.File
 
 import akka.actor.{ Actor, Props }
-import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
@@ -14,6 +13,7 @@ import org.eclipse.jgit.lib.{ ObjectId, Ref, Repository }
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
 
+import scala.concurrent.Future
 import scala.util.matching.Regex
 
 sealed trait FileIndexProcessorRequest
@@ -68,12 +68,12 @@ object FileIndexer {
  * number, which could have relevant use cases.
  */
 class FileIndexer(configuration: Configuration) extends Actor with Logging {
+  import context.dispatcher
+
   protected val inputDocumentDispatcher =
     context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor/inputDocumentDispatcher")
 
   protected val indexProcessor = context.actorFor("/user/hakeaProcessor/repositoryProcessor/indexProcessor")
-
-  implicit private val executionContext = ExecutionContext.defaultExecutionContext(context.system)
 
   def receive = {
     case IndexFile(project, repository, ref, objectId, path) => {

@@ -20,9 +20,21 @@
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <excludes>
                 <exclude>*:war:*</exclude>
+		<exclude>log4j:*</exclude>
                 <exclude>org.eclipse.jetty:jetty-start:*</exclude>
                 <exclude>org.eclipse.jetty.orbit:javax.servlet:*</exclude>
+		<exclude>org.slf4j:*</exclude>
             </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>/lib/ext</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>log4j:*</include>
+		<include>org.slf4j:*</include>
+            </includes>
         </dependencySet>
         <dependencySet>
             <outputFileNameMapping>servlet-api-3.0.${artifact.extension}</outputFileNameMapping>

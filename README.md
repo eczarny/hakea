@@ -4,7 +4,7 @@ The Hakea [Git] [1] repository and source code indexer.
 
 # Requirements
 
-[Java] [2] (version 1.6) is required to run the indexing service and [Solr] [3] distribution.
+[Java] [2] (version 1.7) is required to run the indexing service and [Solr] [3] distribution.
 
 # Building and running
 

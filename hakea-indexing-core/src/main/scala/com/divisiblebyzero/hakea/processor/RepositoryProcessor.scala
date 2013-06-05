@@ -3,7 +3,6 @@ package com.divisiblebyzero.hakea.processor
 import java.io.File
 
 import akka.actor.{ Actor, Props }
-import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
@@ -15,6 +14,8 @@ import org.eclipse.jgit.lib.RefUpdate.Result.NO_CHANGE
 import org.eclipse.jgit.lib.Repository
 
 import scala.collection.JavaConversions._
+import scala.concurrent.Future
+import scala.util.{ Failure, Success }
 
 sealed trait RepositoryProcessorRequest
 
@@ -23,9 +24,9 @@ case class CheckRepositoryForChanges(project: Project) extends RepositoryProcess
 case class CloneRepository(project: Project) extends RepositoryProcessorRequest
 
 class RepositoryProcessor(configuration: Configuration) extends Actor with Logging {
-  protected val indexProcessor = context.actorOf(Props(new IndexProcessor(configuration)), "indexProcessor")
+  import context.dispatcher
 
-  implicit private val executionContext = ExecutionContext.defaultExecutionContext(context.system)
+  protected val indexProcessor = context.actorOf(Props(new IndexProcessor(configuration)), "indexProcessor")
 
   def receive = {
     case CheckRepositoryForChanges(project) => {
@@ -66,15 +67,14 @@ class RepositoryProcessor(configuration: Configuration) extends Actor with Loggi
         cloneCommand.setURI(project.uri).setDirectory(new File(projectPath))
 
         cloneCommand.call()
-      } onSuccess {
-        case git: Git => {
+      } onComplete {
+        case Success(git) => {
           val repository = git.getRepository
           val refs = repository.getRefDatabase.getRefs(R_HEADS).values.toSeq
 
           indexProcessor ! IndexRepositoryFor(project, repository, refs.toList)
         }
-      } onFailure {
-        case e: Exception => e.printStackTrace()
+        case Failure(e) => e.printStackTrace()
       }
     }
   }

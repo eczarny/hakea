@@ -1,14 +1,17 @@
 package com.divisiblebyzero.hakea
 
 import akka.actor.{ ActorSystem, Props }
-import akka.util.Duration
 
 import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.model.Project
 import com.divisiblebyzero.hakea.processor.{ HakeaProcessor, StartIndexing }
 import com.divisiblebyzero.hakea.util.Logging
 
+import scala.concurrent.duration.FiniteDuration
+
 class HakeaIndexer(configuration: Configuration) extends Logging {
+  import scala.concurrent.ExecutionContext.Implicits._
+
   protected val system = ActorSystem("hakea")
 
   protected val hakeaProcessor =
@@ -18,7 +21,7 @@ class HakeaIndexer(configuration: Configuration) extends Logging {
     hakeaProcessor ! StartIndexing(projects.toList)
   }
 
-  def scheduleIndexer(initialDelay: Duration, frequency: Duration) {
+  def scheduleIndexer(initialDelay: FiniteDuration, frequency: FiniteDuration) {
     val projects = configuration.projects.map(_.toProject)
 
     log.info("Starting up Hakea with projects: %s".format(projects.map(_.name)))

@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.yammer.dropwizard</groupId>
-            <artifactId>dropwizard-scala_${scala.version}</artifactId>
+            <groupId>com.massrelevance</groupId>
+            <artifactId>dropwizard-scala_${scala.crossCompileVersion}</artifactId>
             <version>${dropwizard.version}</version>
         </dependency>
         <dependency>

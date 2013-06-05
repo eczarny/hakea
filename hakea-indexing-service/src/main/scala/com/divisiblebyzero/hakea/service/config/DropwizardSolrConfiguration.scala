@@ -1,7 +1,7 @@
 package com.divisiblebyzero.hakea.service.config
 
 import com.divisiblebyzero.hakea.config.SolrConfiguration
-import org.codehaus.jackson.annotate.JsonProperty
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.validator.constraints.NotEmpty
 
 class DropwizardSolrConfiguration extends SolrConfiguration {

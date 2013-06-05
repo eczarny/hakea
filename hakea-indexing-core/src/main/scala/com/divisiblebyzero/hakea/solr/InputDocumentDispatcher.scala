@@ -1,12 +1,13 @@
 package com.divisiblebyzero.hakea.solr
 
 import akka.actor.Actor
-import akka.dispatch.{ ExecutionContext, Future }
 
 import com.divisiblebyzero.hakea.config.Configuration
 import com.divisiblebyzero.hakea.util.Logging
 import org.apache.solr.client.solrj.response.UpdateResponse
 import org.apache.solr.common.SolrInputDocument
+
+import scala.concurrent.Future
 
 sealed trait InputDocumentDispatcherRequest
 
@@ -15,9 +16,9 @@ case class DispatchInputDocument(inputDocument: SolrInputDocument) extends Input
 case object CommitInputDocuments extends InputDocumentDispatcherRequest
 
 class InputDocumentDispatcher(configuration: Configuration) extends Actor with Logging {
-  protected lazy val solrServer = configuration.solr.toSolrServer
+  import context.dispatcher
 
-  implicit private val executionContext = ExecutionContext.defaultExecutionContext(context.system)
+  protected lazy val solrServer = configuration.solr.toSolrServer
 
   def receive = {
     case DispatchInputDocument(inputDocument) => {

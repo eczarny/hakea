@@ -9,13 +9,7 @@ hakea:
   projects:
     -
       name: hakea
-      uri: git@github.com:eczarny/hakea.git
-    -
-      name: spectacle
-      uri: git@github.com:eczarny/spectacle.git
-    -
-      name: zerokit
-      uri: git@github.com:eczarny/zerokit.git
+      uri: https://github.com/eczarny/hakea.git
 
   # The Solr client configuration.
   solr:
@@ -65,6 +59,7 @@ logging:
 
   # Logger-specific levels.
   loggers:
+    com.yammer.dropwizard.config: ERROR
     org.apache.solr.client: WARN
     org.eclipse.jetty.server: WARN
 
